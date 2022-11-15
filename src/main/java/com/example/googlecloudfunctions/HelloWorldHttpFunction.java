@@ -3,6 +3,7 @@ package com.example.googlecloudfunctions;
 import java.io.Writer;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 
 import com.google.cloud.functions.HttpFunction;
 import com.google.cloud.functions.HttpRequest;
