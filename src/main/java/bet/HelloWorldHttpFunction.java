@@ -1,4 +1,4 @@
-package com.example.googlecloudfunctions;
+package bet;
 
 import java.io.Writer;
 
