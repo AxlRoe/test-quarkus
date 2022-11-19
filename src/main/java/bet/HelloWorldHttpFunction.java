@@ -22,6 +22,7 @@ public class HelloWorldHttpFunction implements HttpFunction {
     public void service(HttpRequest httpRequest, HttpResponse httpResponse) throws Exception {
         Writer writer = httpResponse.getWriter();
         writer.write("Hello World");
+        discover.run();
         System.out.println("Receive event Id: ");
     }
 }
