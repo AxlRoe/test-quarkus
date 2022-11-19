@@ -3,7 +3,6 @@ package bet.domain;
 import bet.domain.vo.*;
 import bet.infra.adapters.RunnersApi;
 import bet.infra.adapters.ScheduleApi;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -23,13 +22,10 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class Discover {
 
-    private final ObjectMapper mapper;
     private final ScheduleApi scheduleApi;
     private final RunnersApi runnersApi;
 
-    public Discover(ObjectMapper mapper, ScheduleApi scheduleApi, RunnersApi runnersApi) {
-
-        this.mapper = mapper;
+    public Discover(ScheduleApi scheduleApi, RunnersApi runnersApi) {
         this.scheduleApi = scheduleApi;
         this.runnersApi = runnersApi;
     }
