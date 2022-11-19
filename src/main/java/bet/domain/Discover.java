@@ -31,6 +31,7 @@ public class Discover {
     }
 
     public void run() {
+        System.out.println("Starting run ");
         List<MatchSchedule> eventsNotStarted = scheduleApi.scrapeTodaySchedule()
                 .stream()
                 .filter(schedule -> isNotStartedYet(schedule.getCutoffDate()))
@@ -62,6 +63,8 @@ public class Discover {
         log.info("Sent discover message ");
 
         log.info("Notify new events to scrape arrived ");
+
+        System.out.println("Ending run ");
     }
 
     private List<MatchAndRunner> getMatchAndRunners(List<MatchSchedule> eventsNotStarted) {
