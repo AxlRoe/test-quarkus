@@ -3,9 +3,17 @@ package bet.domain;
 import bet.domain.vo.*;
 import bet.infra.adapters.RunnersApi;
 import bet.infra.adapters.ScheduleApi;
+import bet.infra.dto.message.DiscoverMessage;
+import bet.infra.dto.message.MatchAndRunnerMessage;
+import bet.infra.ports.BrokerRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.enterprise.context.ApplicationScoped;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
@@ -22,12 +30,21 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class Discover {
 
+    private final ObjectMapper mapper;
     private final ScheduleApi scheduleApi;
     private final RunnersApi runnersApi;
+    private final BrokerRepository<DiscoverMessage> brokerDiscoverRepository;
+    private final BrokerRepository<MatchAndRunnerMessage> brokerMrRepository;
 
-    public Discover(ScheduleApi scheduleApi, RunnersApi runnersApi) {
+    public Discover(ObjectMapper mapper, ScheduleApi scheduleApi, RunnersApi runnersApi,
+                    BrokerRepository<DiscoverMessage> brokerDiscoverRepository,
+                    BrokerRepository<MatchAndRunnerMessage> brokerMrRepository) {
+        this.mapper = mapper;
+
         this.scheduleApi = scheduleApi;
         this.runnersApi = runnersApi;
+        this.brokerDiscoverRepository = brokerDiscoverRepository;
+        this.brokerMrRepository = brokerMrRepository;
     }
 
     public void run() {
@@ -60,11 +77,25 @@ public class Discover {
 
         List<Match> enrichedMatches = enrichMatches(matches, additionalMatchInfo);
 
+        brokerDiscoverRepository.send(DiscoverMessage.builder().eventsNotStarted(eventsNotStarted).build());
         log.info("Sent discover message ");
 
-        log.info("Notify new events to scrape arrived ");
+        for (Match match : enrichedMatches) {
+            MatchAndRunnerMessage mrMsg = MatchAndRunnerMessage.builder().match(match).runners(runnerMap.get(match.getEventId())).build();
+            brokerMrRepository.send(mrMsg);
+            log.info("Sent match and runner message: " +  enrichedMatches.stream().map(Match::getEventId).collect(Collectors.joining(";")));
+            Path path = Paths.get(mrMsg.getMatch().getEventId() + "_mr.json");
+            byte[] strToBytes = new byte[0];
+            try {
+                strToBytes = mapper.writeValueAsString(mrMsg).getBytes();
+                Files.write(path, strToBytes);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
-        System.out.println("Ending run ");
+
+        log.info("Notify new events to scrape arrived ");
     }
 
     private List<MatchAndRunner> getMatchAndRunners(List<MatchSchedule> eventsNotStarted) {

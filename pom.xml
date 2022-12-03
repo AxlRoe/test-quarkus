@@ -33,6 +33,11 @@
       <artifactId>quarkus-google-cloud-functions</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkiverse.googlecloudservices</groupId>
+      <artifactId>quarkus-google-cloud-pubsub</artifactId>
+      <version>1.2.2</version>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
