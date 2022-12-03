@@ -30,16 +30,16 @@ import java.util.stream.Collectors;
 @ApplicationScoped
 public class Discover {
 
-    private final ObjectMapper mapper;
+    private final ObjectMapper objectMapper;
     private final ScheduleApi scheduleApi;
     private final RunnersApi runnersApi;
     private final BrokerRepository<DiscoverMessage> brokerDiscoverRepository;
     private final BrokerRepository<MatchAndRunnerMessage> brokerMrRepository;
 
-    public Discover(ObjectMapper mapper, ScheduleApi scheduleApi, RunnersApi runnersApi,
+    public Discover(ObjectMapper objectMapper, ScheduleApi scheduleApi, RunnersApi runnersApi,
                     BrokerRepository<DiscoverMessage> brokerDiscoverRepository,
                     BrokerRepository<MatchAndRunnerMessage> brokerMrRepository) {
-        this.mapper = mapper;
+        this.objectMapper = objectMapper;
 
         this.scheduleApi = scheduleApi;
         this.runnersApi = runnersApi;
@@ -87,13 +87,12 @@ public class Discover {
             Path path = Paths.get(mrMsg.getMatch().getEventId() + "_mr.json");
             byte[] strToBytes = new byte[0];
             try {
-                strToBytes = mapper.writeValueAsString(mrMsg).getBytes();
+                strToBytes = objectMapper.writeValueAsString(mrMsg).getBytes();
                 Files.write(path, strToBytes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-
 
         log.info("Notify new events to scrape arrived ");
     }
