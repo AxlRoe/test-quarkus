@@ -84,14 +84,14 @@ public class Discover {
             MatchAndRunnerMessage mrMsg = MatchAndRunnerMessage.builder().match(match).runners(runnerMap.get(match.getEventId())).build();
             brokerMrRepository.send(mrMsg);
             log.info("Sent match and runner message: " +  enrichedMatches.stream().map(Match::getEventId).collect(Collectors.joining(";")));
-            Path path = Paths.get(mrMsg.getMatch().getEventId() + "_mr.json");
+            /* Path path = Paths.get(mrMsg.getMatch().getEventId() + "_mr.json");
             byte[] strToBytes = new byte[0];
             try {
                 strToBytes = objectMapper.writeValueAsString(mrMsg).getBytes();
                 Files.write(path, strToBytes);
             } catch (IOException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
 
         log.info("Notify new events to scrape arrived ");
