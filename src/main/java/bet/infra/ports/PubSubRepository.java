@@ -8,8 +8,6 @@ import com.google.pubsub.v1.PubsubMessage;
 import com.google.pubsub.v1.TopicName;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-
 
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -17,15 +15,14 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class PubSubRepository<T> implements BrokerRepository<T> {
-    @ConfigProperty(name = "gcp.project.id")
     private String projectId;
-
     final private String topic;
     final private ObjectMapper mapper;
 
-    public PubSubRepository(String topic, ObjectMapper mapper) {
+    public PubSubRepository(String topic, ObjectMapper mapper, String projectId) {
         this.topic = topic;
         this.mapper = mapper;
+        this.projectId = projectId;
     }
 
     @SneakyThrows

@@ -17,13 +17,16 @@ public class PubSubConfig {
     @ConfigProperty(name = "pubsub.mr.out.topic")
     private String mrTopic;
 
+    @ConfigProperty(name = "gcp.project.id")
+    private String projectId;
+
     @ApplicationScoped
     public BrokerRepository<DiscoverMessage> brokerDiscoverRepository(ObjectMapper objectMapper) {
-        return new PubSubRepository<>(scheduleTopic, objectMapper);
+        return new PubSubRepository<>(scheduleTopic, objectMapper, projectId);
     }
 
     @ApplicationScoped
     public BrokerRepository<MatchAndRunnerMessage> brokerMrRepository(ObjectMapper objectMapper) {
-        return new PubSubRepository<>(mrTopic, objectMapper);
+        return new PubSubRepository<>(mrTopic, objectMapper, projectId);
     }
 }
