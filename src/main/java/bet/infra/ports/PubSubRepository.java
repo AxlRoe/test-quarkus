@@ -31,6 +31,7 @@ public class PubSubRepository<T> implements BrokerRepository<T> {
     @SneakyThrows
     @Override
     public boolean send(T body) {
+        System.out.println("topic " + topic + " project " + projectId);
         TopicName topicName = TopicName.of(projectId, topic);
 
         Publisher publisher = null;
