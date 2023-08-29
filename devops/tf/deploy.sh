@@ -8,9 +8,9 @@ if [[ ! -d ${SRC} ]];then
 fi
 
 gcloud functions deploy quarkus-example-http \
-  --gen2
+  --gen2 \
   --region=europe-west8 \
-  --vpc-connector bet-vpc-sless
+  --vpc-connector bet-vpc-sless \
   --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
   --runtime=java11 --trigger-http --allow-unauthenticated --source=${SRC} \
   --set-env-vars EXCHANGE_ADDRESS="test" >> ${LOG_FILE} 2>&1
