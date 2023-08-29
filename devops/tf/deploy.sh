@@ -9,7 +9,7 @@ fi
 
 gcloud functions deploy quarkus-example-http \
   --gen2 \
-  --memory="256Mi" \
+  --memory="256Mi"  \
   --max-instances=2 \
   --region ${REGION} \
   --vpc-connector bet-vpc-sless \
