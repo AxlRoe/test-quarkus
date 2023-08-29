@@ -2,7 +2,7 @@
 
 #GCP_EXCHANGE_ADDRESS=$(gcloud compute addresses describe helloweb-ip --region europe-west8 | grep address: | awk '{print $NF}')
 
-if [[ ! -f ${LOG_FILE} ]];then
+if [[ ! -d ${SRC} ]];then
   echo "Missing jar, build it"
   exit 1
 fi
