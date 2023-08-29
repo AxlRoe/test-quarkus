@@ -44,9 +44,13 @@ resource "null_resource" "deploy_function" {
 
   provisioner "local-exec" {
     when = destroy
-    command     = "/bin/bash ${path.module}/undeploy.sh '${self.triggers.region}'"
+    command     = "/bin/bash ${path.module}/undeploy.sh"
     interpreter = ["/bin/bash", "-c"]
     working_dir = path.module
+
+    environment = {
+      REGION = self.triggers.region
+    }
   }
 
   depends_on = [google_project_service.cloudbuild, google_project_service.run]
