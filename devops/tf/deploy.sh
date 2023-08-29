@@ -9,6 +9,8 @@ fi
 
 gcloud functions deploy quarkus-example-http \
   --gen2 \
+  --memory="256Mi" \
+  --max-instances= 2 \
   --region=europe-west8 \
   --vpc-connector bet-vpc-sless \
   --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
