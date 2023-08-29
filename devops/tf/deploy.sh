@@ -7,14 +7,14 @@ if [[ ! -d ${SRC} ]];then
   exit 1
 fi
 
-gcloud functions deploy quarkus-example-http \
+gcloud functions --gen2 deploy quarkus-example-http \
   --region=europe-west8 \
   --vpc-connector bet-vpc-sless
   --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
   --runtime=java11 --trigger-http --allow-unauthenticated --source=${SRC} \
   --set-env-vars EXCHANGE_ADDRESS="test" >> ${LOG_FILE} 2>&1
 
-URI=$(gcloud functions describe quarkus-example-http --region ${REGION} --format="value(serviceConfig.uri)")
+URI=$(gcloud functions describe quarkus-example-http --gen2 --region ${REGION} --format="value(serviceConfig.uri)")
 
 cat << EOF > ${OUT_FILE}
 uri: $URI
