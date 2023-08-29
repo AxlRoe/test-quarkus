@@ -52,6 +52,7 @@ resource "null_resource" "deploy_function" {
     working_dir = path.module
 
     environment = {
+      LOG_FILE = "${path.module}/undeploy.log"
       #self reference only parent attribute etc...
       REGION= self.triggers.region
     }
