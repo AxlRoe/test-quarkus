@@ -12,7 +12,7 @@ gcloud functions deploy quarkus-example-http \
   --memory="256Mi"  \
   --max-instances=2 \
   --region ${REGION} \
-  --vpc-connector bet-vpc-sless \
+  --vpc-connector ${VPC_CONNECTOR} \
   --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
   --runtime=java11 --trigger-http --allow-unauthenticated --source=${SRC} \
   --set-env-vars EXCHANGE_ADDRESS="test" >> ${LOG_FILE} 2>&1

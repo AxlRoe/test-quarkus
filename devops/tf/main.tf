@@ -39,6 +39,7 @@ resource "null_resource" "deploy_function" {
       SRC="${path.module}/../../target/deployment"
       REGION= var.region
       OUT_FILE="${path.module}/tmp.yaml"
+      VPC_CONNECTOR=data.google_vpc_access_connector.bet-sless-vpc.name
     }
   }
 
