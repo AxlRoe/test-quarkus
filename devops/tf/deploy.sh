@@ -7,7 +7,8 @@ if [[ ! -d ${SRC} ]];then
   exit 1
 fi
 
-gcloud functions --gen2 deploy quarkus-example-http \
+gcloud functions deploy quarkus-example-http \
+  --gen2
   --region=europe-west8 \
   --vpc-connector bet-vpc-sless
   --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
