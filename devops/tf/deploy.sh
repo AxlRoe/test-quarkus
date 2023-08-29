@@ -14,8 +14,7 @@ gcloud functions deploy quarkus-example-http \
   --region ${REGION} \
   --vpc-connector ${VPC_CONNECTOR} \
   --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
-  --runtime=java11 --trigger-http --allow-unauthenticated --source=${SRC} \
-  --set-env-vars EXCHANGE_ADDRESS="test" >> ${LOG_FILE} 2>&1
+  --runtime=java11 --trigger-http --allow-unauthenticated --source=${SRC} >> ${LOG_FILE} 2>&1
 
 URI=$(gcloud functions describe quarkus-example-http --gen2 --region ${REGION} --format="value(serviceConfig.uri)")
 
