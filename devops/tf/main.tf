@@ -10,6 +10,17 @@ data "google_vpc_access_connector" "bet-sless-vpc" {
   name = "bet-sless-vpc"
 }
 
+resource "google_project_service" "cloudbuild" {
+  service            = "cloudbuild.googleapis.com"
+  disable_on_destroy = false
+}
+
+resource "google_project_service" "run" {
+  service            = "run.googleapis.com"
+  disable_on_destroy = false
+}
+
+
 #TODO read regional ip of exchange
 
 resource "null_resource" "deploy_function" {
@@ -26,6 +37,8 @@ resource "null_resource" "deploy_function" {
       OUT_FILE="${path.module}/tmp.yaml"
     }
   }
+
+  depends_on = [google_project_service.cloudbuild, google_project_service.run]
 }
 
 data "local_file" "tmp" {
