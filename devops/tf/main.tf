@@ -25,6 +25,10 @@ resource "google_project_service" "run" {
 
 resource "null_resource" "deploy_function" {
 
+  triggers = {
+    region = var.region
+  }
+
   provisioner "local-exec" {
     command     = "/bin/bash ${path.module}/deploy.sh"
     interpreter = ["/bin/bash", "-c"]
@@ -40,7 +44,7 @@ resource "null_resource" "deploy_function" {
 
   provisioner "local-exec" {
     when = destroy
-    command     = "/bin/bash ${path.module}/undeploy.sh '${var.region}'"
+    command     = "/bin/bash ${path.module}/undeploy.sh '${self.triggers.region}'"
     interpreter = ["/bin/bash", "-c"]
     working_dir = path.module
   }
