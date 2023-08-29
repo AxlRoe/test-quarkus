@@ -3,15 +3,12 @@
 #GCP_EXCHANGE_ADDRESS=$(gcloud compute addresses describe helloweb-ip --region europe-west8 | grep address: | awk '{print $NF}')
 
 if [[ ! -d ${SRC} ]];then
-  echo "Missing jar, build it"
+  echo "Missing jar, build it" >> ${LOG_FILE} 2>&1
   exit 1
 fi
 
 gcloud functions deploy quarkus-example-http \
-  --gen2 \
-  --memory="256Mi" \
-  --max-instances= 2 \
-  --region=europe-west8 \
+  --region ${REGION} \
   --vpc-connector bet-vpc-sless \
   --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
   --runtime=java11 --trigger-http --allow-unauthenticated --source=${SRC} \
