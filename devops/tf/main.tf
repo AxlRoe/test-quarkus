@@ -26,6 +26,7 @@ resource "google_project_service" "run" {
 resource "null_resource" "deploy_function" {
 
   triggers = {
+    invokes_me_everytime = uuid()
     region = var.region
   }
 
@@ -44,13 +45,15 @@ resource "null_resource" "deploy_function" {
   }
 
   provisioner "local-exec" {
+    #it's not possible to reference vars here, so it's necessary to force the trigger with uuid
     when = destroy
     command     = "/bin/bash ${path.module}/undeploy.sh"
     interpreter = ["/bin/bash", "-c"]
     working_dir = path.module
 
     environment = {
-      REGION = self.triggers.region
+      #self reference only parent attribute etc...
+      REGION= self.triggers.region
     }
   }
 
