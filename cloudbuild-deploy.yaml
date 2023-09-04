@@ -1,0 +1,29 @@
+steps:
+  - name: gcr.io/cloud-builders/git
+    id: Clone CD
+    secretEnv: [ 'TOKEN_GITHUB' ]
+    args:
+      - clone
+      - https://AxlRoe:$$TOKEN_GITHUB@github.com/AxlRoe/$_CD_REPO.git
+
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: /bin/sh
+    args:
+      - '-c'
+      - |
+        gcloud functions deploy quarkus-example-http \
+          --gen2 \
+          --memory="256Mi"  \
+          --max-instances=2 \
+          --region $_REGION \
+          --vpc-connector $_VPC_CONNECTOR \
+          --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
+          --runtime=java11 --trigger-http --allow-unauthenticated --source=/workspace/$_CD_REPO/functions/
+    volumes:
+      - name: 'deployment'
+        path: /root
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/id-github/versions/latest
+      env: 'TOKEN_GITHUB'
