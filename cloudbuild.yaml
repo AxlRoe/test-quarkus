@@ -5,11 +5,8 @@ steps:
     args:
       - -c
       - |
+        cd /workspace && \
         ./mvnw package
-        cp -r target/deployment /root
-    volumes:
-      - name: 'deployment'
-        path: /root
 
   # Clone the repository
   - name: 'gcr.io/cloud-builders/gcloud'
@@ -17,7 +14,7 @@ steps:
     args:
       - '-c'
       - |
-        cp -r /root/deployment .
+        cd /workspace && \
         gcloud functions deploy quarkus-example-http \
           --gen2 \
           --memory="256Mi"  \
@@ -25,10 +22,7 @@ steps:
           --region $_REGION \
           --vpc-connector $_VPC_CONNECTOR \
           --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
-          --runtime=java11 --trigger-http --allow-unauthenticated --source=deployment
-    volumes:
-      - name: 'deployment'
-        path: /root
+          --runtime=java11 --trigger-http --allow-unauthenticated --source=target/deployment
 
   - name: gcr.io/cloud-builders/git
     id: Clone CD
@@ -37,7 +31,7 @@ steps:
     args:
       - '-c'
       - |
-        cd /workspace
+        cd /workspace && \
         git clone https://AxlRoe:$$TOKEN_GITHUB@github.com/AxlRoe/$_CD_REPO.git && \
         mkdir -p $_CD_REPO/functions && \
         cd $_CD_REPO/functions && \
