@@ -5,7 +5,6 @@ steps:
     args:
       - -c
       - |
-        cd /workspace && \
         ./mvnw package
 
   # Clone the repository
@@ -14,7 +13,6 @@ steps:
     args:
       - '-c'
       - |
-        cd /workspace && \
         gcloud functions deploy quarkus-example-http \
           --gen2 \
           --memory="256Mi"  \
