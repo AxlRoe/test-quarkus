@@ -1,6 +1,6 @@
 # Access the id_github file from Secret Manager, and setup SSH
 steps:
-  - name: '	gcr.io/cloud-builders/mvn'
+  - name: 'gcr.io/cloud-builders/mvn'
     entrypoint: 'bash'
     args:
       - -c

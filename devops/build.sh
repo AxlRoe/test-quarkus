@@ -6,9 +6,3 @@ echo "build "
 cd ..
 ./mvnw package
 
-echo "deploy "
-cd -
-cd tf
-
-terraform init
-terraform apply -auto-approve
