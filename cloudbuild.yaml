@@ -4,7 +4,7 @@ steps:
     id: "build"
     entrypoint: './mvnw'
     args:
-      - package
+      - install
 
   # Clone the repository
   - name: 'gcr.io/cloud-builders/gcloud'
