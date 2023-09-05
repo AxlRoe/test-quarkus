@@ -1,6 +1,6 @@
 # Access the id_github file from Secret Manager, and setup SSH
 steps:
-  - name: 'maven:3.9.4'
+  - name: 'gcr.io/cloud-builders/mvn'
     id: "build"
     entrypoint: './mvnw'
     args:
