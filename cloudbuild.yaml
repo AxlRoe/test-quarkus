@@ -29,9 +29,7 @@ steps:
     args:
       - -c #TODO check command not found when execute tar -czf
       - |
-        pwd && \
-        ls -al && \
-        tar -czf /tmp/m2-function-cache.tar.gz .m2 && \ 
+        tar -czf /tmp/m2-function-cache.tar.gz /root/.m2 && \ 
         gsutil cp /tmp/m2-function-cache.tar.gz gs://${_CACHE_BUCKET}/mvn/m2-function-cache.tar.gz
     volumes:
       - name: m2
