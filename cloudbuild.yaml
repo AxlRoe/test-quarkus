@@ -6,7 +6,7 @@ steps:
       - -c
       - |
         (
-          gsutil cp gs://${_CACHE_BUCKET}/mvn/m2-function-cache.tar.gz /tmp/m2-function-cache.tar.gz &&
+          gsutil cp gs://${_CACHE_BUCKET}/mvn/m2-function-cache.tar.gz /tmp/m2-function-cache.tar.gz && \
           tar -xzf /tmp/m2-function-cache.tar.gz
         ) || echo 'Cache not found'
     volumes:
