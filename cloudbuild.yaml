@@ -27,44 +27,45 @@ steps:
     dir: /root
     entrypoint: bash
     args:
-      - -c
+      - -c #TODO check command not found when execute tar -czf
       - |
-        tar -czf /tmp/m2-function-cache.tar.gz .m2 && \
+        ls -l && \
+        tar -czf /tmp/m2-function-cache.tar.gz .m2 && \ 
         gsutil cp /tmp/m2-function-cache.tar.gz gs://${_CACHE_BUCKET}/mvn/m2-function-cache.tar.gz
     volumes:
       - name: m2
         path: /root/.m2/
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: /bin/sh
-    args:
-      - '-c'
-      - |
-        gcloud functions deploy quarkus-example-http \
-          --gen2 \
-          --memory="256Mi"  \
-          --max-instances=2 \
-          --region $_REGION \
-          --vpc-connector $_VPC_CONNECTOR \
-          --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
-          --runtime=java11 --trigger-http --allow-unauthenticated --source=target/deployment
-
-  - name: gcr.io/cloud-builders/git
-    id: Clone CD
-    secretEnv: [ 'TOKEN_GITHUB' ]
-    entrypoint: /bin/sh
-    args:
-      - '-c'
-      - |
-        cd /workspace && \
-        git clone https://AxlRoe:$$TOKEN_GITHUB@github.com/AxlRoe/$_CD_REPO.git && \
-        mkdir -p $_CD_REPO/functions && \
-        cd $_CD_REPO/functions && \
-        git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)') && \
-        git checkout -b $REPO_NAME"-"$SHORT_SHA && \
-        cp ../../target/deployment/*.jar . && \
-        git add *.jar && \
-        git commit -m "Added $REPO_NAME candidate" && \
-        git push -u origin $REPO_NAME"-"$SHORT_SHA 
+#  - name: 'gcr.io/cloud-builders/gcloud'
+#    entrypoint: /bin/sh
+#    args:
+#      - '-c'
+#      - |
+#        gcloud functions deploy quarkus-example-http \
+#          --gen2 \
+#          --memory="256Mi"  \
+#          --max-instances=2 \
+#          --region $_REGION \
+#          --vpc-connector $_VPC_CONNECTOR \
+#          --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
+#          --runtime=java11 --trigger-http --allow-unauthenticated --source=target/deployment
+#
+#  - name: gcr.io/cloud-builders/git
+#    id: Clone CD
+#    secretEnv: [ 'TOKEN_GITHUB' ]
+#    entrypoint: /bin/sh
+#    args:
+#      - '-c'
+#      - |
+#        cd /workspace && \
+#        git clone https://AxlRoe:$$TOKEN_GITHUB@github.com/AxlRoe/$_CD_REPO.git && \
+#        mkdir -p $_CD_REPO/functions && \
+#        cd $_CD_REPO/functions && \
+#        git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)') && \
+#        git checkout -b $REPO_NAME"-"$SHORT_SHA && \
+#        cp ../../target/deployment/*.jar . && \
+#        git add *.jar && \
+#        git commit -m "Added $REPO_NAME candidate" && \
+#        git push -u origin $REPO_NAME"-"$SHORT_SHA
 
 availableSecrets:
   secretManager:
