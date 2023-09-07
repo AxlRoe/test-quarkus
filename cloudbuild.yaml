@@ -12,7 +12,7 @@ steps:
   - name: gcr.io/cloud-builders/mvn
     id: build
     args:
-      - ["package", "-Pnative", "-Dmaven.test.skip=true", "-Dquarkus.container-image.build=true", "-Dquarkus.native.container-build=true", "-Dquarkus.native.container-runtime=docker"]
+      - ["package", "-Pnative"]
     volumes:
       - name: m2
         path: /root/.m2/
