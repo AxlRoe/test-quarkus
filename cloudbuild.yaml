@@ -1,18 +1,36 @@
 steps:
-#  - name: gcr.io/cloud-builders/git
-#    id: Clone CD
-#    secretEnv: [ 'TOKEN_GITHUB' ]
-#    entrypoint: /bin/sh
-#    args:
-#      - '-c'
-#      - |
-#        cd /workspace && \
-#        git clone https://AxlRoe:$$TOKEN_GITHUB@github.com/AxlRoe/$_CD_REPO.git
+  - name: gcr.io/cloud-builders/gsutil
+    dir: /root
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        (
+          gsutil cp gs://${_CACHE_BUCKET}/mvn/m2-function-cache.tar.gz /tmp/m2-function-cache.tar.gz &&
+          tar -xzf /tmp/m2-function-cache.tar.gz
+        ) || echo 'Cache not found'
+    volumes:
+      - name: m2
+        path: /root/.m2/
 
   - name: gcr.io/cloud-builders/mvn
     id: build
     args:
       - package
+    volumes:
+      - name: m2
+        path: /root/.m2/
+
+  - name: gcr.io/cloud-builders/gsutil
+    waitFor:
+      - build
+    dir: /root
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        tar -czf /tmp/m2-function-cache.tar.gz .m2 && \
+        gsutil cp /tmp/m2-function-cache.tar.gz gs://${_CACHE_BUCKET}/mvn/m2-function-cache.tar.gz
     volumes:
       - name: m2
         path: /root/.m2/
@@ -29,12 +47,30 @@ steps:
           --region $_REGION \
           --vpc-connector $_VPC_CONNECTOR \
           --entry-point=io.quarkus.gcp.functions.QuarkusHttpFunction \
-          --runtime=java11 --trigger-http --allow-unauthenticated --source=/workspace/$REPO_NAME/functions/
+          --runtime=java11 --trigger-http --allow-unauthenticated --source=target/deployment
     volumes:
       - name: 'm2'
         path: /root/.m2
 
-#availableSecrets:
-#  secretManager:
-#    - versionName: projects/$PROJECT_ID/secrets/$_SECRET_NAME/versions/latest
-#      env: 'TOKEN_GITHUB'
+  - name: gcr.io/cloud-builders/git
+    id: Clone CD
+    secretEnv: [ 'TOKEN_GITHUB' ]
+    entrypoint: /bin/sh
+    args:
+      - '-c'
+      - |
+        cd /workspace && \
+        git clone https://AxlRoe:$$TOKEN_GITHUB@github.com/AxlRoe/$_CD_REPO.git && \
+        mkdir -p $_CD_REPO/functions && \
+        cd $_CD_REPO/functions && \
+        git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)') && \
+        git checkout -b $REPO_NAME"-"$SHORT_SHA && \
+        cp ../../$REPO_NAME/target/deployment/*.jar . && \
+        git add *.jar && \
+        git commit -m "Added $REPO_NAME candidate" && \
+        git push -u origin $REPO_NAME"-"$SHORT_SHA 
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/$PROJECT_ID/secrets/$_SECRET_NAME/versions/latest
+      env: 'TOKEN_GITHUB'
