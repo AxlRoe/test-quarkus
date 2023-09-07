@@ -13,7 +13,6 @@ steps:
     id: build
     args:
       - package
-      - "-Pnative"
     volumes:
       - name: m2
         path: /root/.m2/
