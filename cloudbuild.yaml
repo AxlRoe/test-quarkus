@@ -60,11 +60,10 @@ steps:
         mkdir -p $_CD_REPO/functions && \
         cd $_CD_REPO/functions && \
         git config user.email $(gcloud auth list --filter=status:ACTIVE --format='value(account)') && \
-        git checkout -b $REPO_NAME"-"$SHORT_SHA && \
         cp ../../target/deployment/*.jar . && \
         git add *.jar && \
         git commit -m "Added $REPO_NAME candidate" && \
-        git push -u origin $REPO_NAME"-"$SHORT_SHA
+        git push -u origin master
 
 availableSecrets:
   secretManager:
