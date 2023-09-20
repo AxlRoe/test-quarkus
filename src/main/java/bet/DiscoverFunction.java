@@ -1,12 +1,11 @@
 package bet;
 
+import bet.domain.Discover;
+import io.quarkus.funqy.Funq;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-
-import bet.domain.Discover;
-import com.google.pubsub.v1.PubsubMessage;
-import io.quarkus.funqy.Funq;
 
 @ApplicationScoped
 @Named("test")
