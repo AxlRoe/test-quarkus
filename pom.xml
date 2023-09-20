@@ -30,7 +30,7 @@
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-google-cloud-functions</artifactId>
+      <artifactId>quarkus-funqy-google-cloud-functions</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkiverse.googlecloudservices</groupId>
