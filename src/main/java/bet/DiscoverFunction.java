@@ -13,7 +13,7 @@ public class DiscoverFunction {
     @Inject
     private Discover discover;
     @Funq
-    public void trigger(String pubSubEvent) {
+    public void trigger(Object pubSubEvent) {
         System.out.println("Receive event Id: ");
         discover.run();
         System.out.println("Discover finish ");
