@@ -11,11 +11,8 @@ import io.quarkus.funqy.Funq;
 @ApplicationScoped
 @Named("test")
 public class DiscoverFunction {
-
     @Inject
     private Discover discover;
-
-
     @Funq
     public void trigger(PubsubMessage pubSubEvent) {
         System.out.println("Receive event Id: ");
