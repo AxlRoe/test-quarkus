@@ -14,7 +14,7 @@ public class DiscoverFunction {
     @Inject
     private Discover discover;
     @Funq
-    public void trigger(PubsubMessage pubSubEvent) {
+    public void trigger(String pubSubEvent) {
         System.out.println("Receive event Id: ");
         discover.run();
         System.out.println("Discover finish ");
