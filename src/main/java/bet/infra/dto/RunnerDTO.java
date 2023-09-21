@@ -35,6 +35,8 @@ public class RunnerDTO {
     private String eventId;
     @JsonProperty("odd")
     private double odd;
+    @JsonProperty("startOdd")
+    private double startOdd;
     @JsonProperty("matched")
     private double matched;
     @JsonProperty("available")

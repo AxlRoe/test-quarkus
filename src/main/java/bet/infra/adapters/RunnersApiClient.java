@@ -53,6 +53,7 @@ public class RunnersApiClient implements RunnersApi {
                                 .map(dto -> Runner.builder()
                                     .available(dto.getAvailable())
                                     .odd(dto.getOdd())
+                                    .startOdd(dto.getStartOdd())
                                     .id(dto.getEventId())
                                     .marketId(dto.getMarketId())
                                     .marketName(dto.getMarketName())
