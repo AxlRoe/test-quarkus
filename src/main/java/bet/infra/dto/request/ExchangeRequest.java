@@ -1,7 +1,6 @@
 package bet.infra.dto.request;
 
 import lombok.*;
-import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.util.List;
 @AllArgsConstructor
@@ -18,7 +17,6 @@ public class ExchangeRequest {
 
     private String resolution;
 
-    @Valid
     private List<String> eventids;
 
 }

@@ -17,8 +17,8 @@ public class Runner {
     private String marketId;
     private String marketName;
     private String runnerName;
-    private double lay;
-    private double back;
+    private double odd;
+    private double startOdd;
     private double matched;
     private double available;
     private double totalAvailable;

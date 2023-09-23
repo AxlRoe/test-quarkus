@@ -15,7 +15,6 @@ public class BetFeignClient<T> {
                 //.client(new OkHttpClient())
         FeignBuilder = Feign.builder()
                 .client(new OkHttpClient())
-                .errorDecoder(new BetErrorDecoder())
                 .encoder(mapperConfiguration.getEncoder())
                 .decoder(mapperConfiguration.getDecoder())
                 .logLevel(Logger.Level.FULL);

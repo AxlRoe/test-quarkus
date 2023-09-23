@@ -33,10 +33,10 @@ public class RunnerDTO {
     private String runnerId;
     @JsonProperty("eventId")
     private String eventId;
-    @JsonProperty("lay")
-    private double lay;
-    @JsonProperty("back")
-    private double back;
+    @JsonProperty("odd")
+    private double odd;
+    @JsonProperty("startOdd")
+    private double startOdd;
     @JsonProperty("matched")
     private double matched;
     @JsonProperty("available")
